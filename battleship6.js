@@ -312,7 +312,7 @@ function endScreen(won) {
     message = "";
     if (won) {
         sndWonGame.play();
-        finalTries = tries + 1;
+        var finalTries = tries + 1;
         displayMessage.className = "green";
         displayMessage.innerHTML = "Grattis, du sänkte alla skepp med " + finalTries + " försök kvar!";
     } else {
