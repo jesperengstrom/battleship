@@ -1,6 +1,13 @@
+/* Hej och kul att du vill kolla in min kod. Jag heter Jesper Engstrom och gjorde det här spelet som ett hobbyprojekt under två veckor 
+december -16 parallellt med Front End-utbildningen på Nackademin i sthlm. Detta är mitt första spel, jag skrev det efter eget 
+huvud utan ramverk eller annan hjälp. Ha därför överseende om koden är lite hur som helst på sina ställen ;) 
+kontakt: jengstro@gmail.com 
+*/
+
+//När DOM är laddad kör vi funktionen startGame som anropar alla övriga funktioner.
 window.addEventListener("DOMContentLoaded", startGame, false);
 
-//ljud
+//Mina ljud
 var sndSankShip = new Audio('Audio/sankShip.mp3');
 var sndMissShip = new Audio('Audio/missShip.mp3');
 var sndHitShip = new Audio('Audio/hitShip.mp3');
@@ -9,7 +16,7 @@ var sndLostGame = new Audio('Audio/lostGame.mp3');
 var sndMouseOver = new Audio('Audio/mouseOver.mp3');
 var sndClockTick = new Audio('Audio/clockTick.mp3');
 
-
+//Globala variabler
 var playingField = [];
 var cols = 8;
 var rows = 8;
@@ -33,7 +40,7 @@ function setDifficulty() {
 }*/
 
 
-// mina skepp, ett objekt som innehåller objekt för varje skepp
+// mina skepp, ett objekt som innehåller objekt för varje skepp, med namn färg mm.
 
 var ships = {
     Jolle: {
@@ -86,9 +93,9 @@ var ships = {
     }
 };
 
-//createplayingfield skapar spelplanen.
-//lägger till objekt i arrayen playingfield för varje ruta med koordinater & ship false o hit false.
-//skapar också element på sidan samtidigt o ger dem id och properties
+/*createPlayingField skapar spelplanen rows * cols.
+Lägger till objekt i arrayen playingField för varje ruta med koordinater & ship false o hit false.
+Skapar samtidigt element på sidan o ger dem id och properties */
 
 function createPlayingField() {
     var board = document.getElementById("board");
@@ -120,11 +127,9 @@ function createPlayingField() {
     }
 }
 
-/*Detta är huvudfunktionen. Vi testar att lägga ut skeppet (parameter) 100 gånger, sedan skrivs ett felmeddelande ut
-slumpar först fram om vi ska lägga på rad eller kolumn
-sedan anropas createShip med rätt argument å vi kollar att vi får tillbaks en array i rätt storlek
-vi kör sedan testship och om den kommer tillbaka true så lägger vi ut skeppet; talar om detta för spelplanen o ger
-skeppet koordinaterna samt bryter loopen.*/
+/*Detta är huvudfunktionen. Slumpar först fram om vi ska lägga på rad eller kolumn. Vi kör sedan de två hjälpfunktionerna createShip och testShip. 
+Om testerna går igenom placerar vi ut skeppet på spelplanen samt i sidebaren, skickar rätt koordinater till skeppet samt bryter loopen. 
+Vi testar att lägga ut skeppet (ship) 100 gånger, sedan skrivs ett felmeddelande ut i konsolen.*/
 
 function placeShip(ship) {
     var newShip = [];
@@ -155,6 +160,38 @@ function placeShip(ship) {
     }
 }
 
+/*createShip returnerar ett förslag (array) på en placering av  ett skepp. Villkoren är att det 
+inte redan ligger ett skepp på startpunkten samt att det får plats på spelplanen (startpunkt + skeppstorlek <= rad/kolumnstorlek).
+Ska vi lägga horisontellt adderar vi 1 för varje koordinat. Vertikalt adderar vi antalet rutor på en rad. Returneras en array av rätt
+längd från denna funktion vet placeShip att det gick.*/
+
+function createShip(axis, dir, thisShip, add) {
+    var myShip = [],
+        addEach = 0,
+        i = 0;
+    var startPoint = Math.floor(Math.random() * squares - 1) + 1;
+    if (playingField[startPoint].ship === false && (playingField[startPoint][axis] + thisShip.size) <= dir) {
+        for (i = 0; i < thisShip.size; i++) {
+            myShip.push(startPoint + addEach);
+            addEach += add;
+        }
+    }
+    return myShip;
+}
+
+//hjälpfunk testShip kollar om någon av skeppets koordinater är upptagna av ett skepp och returnerar isf false till placeShip, annars true.
+
+function testShip(newShip) {
+    for (var i = 0; i < newShip.length; i++) {
+        if (playingField[newShip[i]].ship === true) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// createSidebarShips renderar varje skepp vi placerar på spelplanen sidebaren (till höger), ruta för ruta.  
+
 function createSidebarShips(shipcoord, color, name) {
     var sideship = document.getElementById("sideship");
     var row = document.createElement("div");
@@ -171,6 +208,9 @@ function createSidebarShips(shipcoord, color, name) {
     }
 }
 
+/* showSidebarShips fixar effekterna i sidebaren till höger. När vi har träffat en ruta där det ligger ett skepp får rutan 
+dynamisk färg + opacitet (beroende på hur många delar vi sänkt o hur stort skeppet är). När vi sänkt det får hela raden "glow".*/
+
 function showSidebarShips(name, full) {
     var shipOpac = document.getElementsByClassName(name);
     var squaresHit = ships[name].size - ships[name].coords.length;
@@ -185,37 +225,10 @@ function showSidebarShips(name, full) {
     }
 }
 
-/*createShip returnerar ett förslag (array) på en placering för ett skepp. Enda två villkoren är att det 
-inte redan ligger ett skepp på startpunkten samt att det får plats (startpunkt + skeppstorlek <= rad/kolumnstorlek)
-ska vi lägga horisontellt lägger vi på 1 för varje gång. Vertikalt måste vi plussa på antalet rutor på en rad.*/
 
-function createShip(axis, dir, thisShip, add) {
-    var myShip = [],
-        addEach = 0,
-        i = 0;
-    var startPoint = Math.floor(Math.random() * squares - 1) + 1;
-    if (playingField[startPoint].ship === false && (playingField[startPoint][axis] + thisShip.size) <= dir) {
-        for (i = 0; i < thisShip.size; i++) {
-            myShip.push(startPoint + addEach);
-            addEach += add;
-        }
-    }
-    return myShip;
-}
-
-//testShip kollar om någon av skeppets koordinater är upptagen och returnerar isf false, annars true.
-
-function testShip(newShip) {
-    for (var i = 0; i < newShip.length; i++) {
-        if (playingField[newShip[i]].ship === true) {
-            return false;
-        }
-    }
-    return true;
-}
-
-//Printplayingfield skriver ut spelplanen ruta för ruta, samt skriver ut markeringen för vilket 
-//skepp som ligger där alt - för ledig ruta. En rad skrivs ut i konsolen när strängen är lika lång som antalet kolumner.
+/*Printplayingfield skapades från början för att skriva ut skeppens placering i konsolen. 
+(En rad skrivs ut när strängen är lika lång som antalet kolumner). Nu används den också för att lägga till event listeners
+dynamiskt för varje ruta som renderas på spelplanen (lyssnar efter klick o mouseover). */
 
 function printPlayingField() {
     var row = "";
@@ -234,7 +247,9 @@ function printPlayingField() {
     }
 }
 
-//playerClick styr vad som händer när en spelare klickar på en ruta
+/* playerClick är den andra "huvudfunktionen" och styr vad som händer när en spelare klickar på en ruta, vilken text som dyker upp 
+på skärmen mm. Scenarion: 1) Vi har redan klickat rutan. 2) Det ligger ett skepp där --> kör hjälpfunktionerna hitShip för att kolla om a)
+vi sänkt skeppet samt b) checkWon om vi vunnit. 3) vi bommar. Oavsett vad räknar vi ner försöken med triesLeft.*/
 
 function playerClick() {
 
@@ -273,7 +288,29 @@ function playerClick() {
     setTimeout(triesLeft, 200);
 }
 
-//triesLeft räknar ner antalet försök och laddar om sidan när vi nått 0.
+//Har vi täffat ett skepp tar vi bort den koordinaten från skeppets coords-array. När length = 0 är det sänkt.
+
+function hitShip(shipcoords, square) {
+    for (var i = shipcoords.length - 1; i >= 0; i--) {
+        if (shipcoords[i] == square) {
+            shipcoords.splice(i, 1);
+        }
+    }
+    return shipcoords;
+}
+
+//har samtliga skepp key/value = float/false är alla skepp sänkta. Vi har vunnit (endScreen). Annars returneras false.
+
+function checkWon() {
+    for (var i in ships) {
+        if (ships[i].float) {
+            return false;
+        }
+    }
+    setTimeout(endScreen(true), 1000);
+}
+
+//triesLeft räknar ner antalet försök vi har kvar. Vid 10 försök kvar varnar den. Vid 0 har vi förlorat (endScreen).
 
 function triesLeft() {
     var displayTries = document.getElementById("tries");
@@ -288,23 +325,8 @@ function triesLeft() {
     tries--;
 }
 
-function hitShip(shipcoords, square) {
-    for (var i = shipcoords.length - 1; i >= 0; i--) {
-        if (shipcoords[i] == square) {
-            shipcoords.splice(i, 1);
-        }
-    }
-    return shipcoords;
-}
-
-function checkWon() {
-    for (var i in ships) {
-        if (ships[i].float) {
-            return false;
-        }
-    }
-    setTimeout(endScreen(true), 1000);
-}
+/*Slutskärm. Olika meddelande beroende på om vi vunnit eller förlorat. 
+for-loopen allra sist renderar spelplanen ytterligare en gång med sina "rätta" färger för att visa var skeppen låg*/
 
 function endScreen(won) {
     sndClockTick.pause();
@@ -329,12 +351,13 @@ function endScreen(won) {
     }
 }
 
+//spelar mouseover-ljud. 
+
 function mouseoverSound() {
     sndMouseOver.play();
-
 }
 
-// En funktion för att dra igång alla funktioner som behövs
+// startGame ropar på funktioner som behövs vid spelstart samt lägger ut de skepp vi vill ha.
 
 function startGame() {
     createPlayingField();
@@ -346,6 +369,4 @@ function startGame() {
     placeShip(ships.Tanker);
     printPlayingField();
     triesLeft();
-    //console.log(playingField);
-    //console.log(ships);
 }
