@@ -276,12 +276,14 @@ function playerClick() {
             displayMessage.className = "yellow";
             displayMessage.innerHTML = "Du träffade " + playingField[this.id].name + "! " + message;
             showSidebarShips(playingField[this.id].name, false);
+            sndHitShip.currentTime = 0;
             sndHitShip.play();
         }
     } else {
         this.style.background = "#96c4f2";
         displayMessage.className = "red";
         displayMessage.innerHTML = "Du bommade... " + message;
+        sndMissShip.currentTime = 0;
         sndMissShip.play();
     }
     playingField[this.id].hit = true;
@@ -354,6 +356,7 @@ function endScreen(won) {
 //spelar mouseover-ljud. 
 
 function mouseoverSound() {
+    sndMouseOver.currentTime = 0;
     sndMouseOver.play();
 }
 
