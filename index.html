@@ -7,14 +7,22 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sänka skepp</title>
     <script type="text/javascript" src="battleship6.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="main.css">
     <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+
 </head>
 
 <body>
     <main>
         <header>
-            <h1 class="no-margin">Sänka skepp</h1>
+            <h1 class="no-margin mr-5">Sänka skepp</h1>
+            <button type="button" id="showToplistBtn" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#toplistModal">
+                Topplista
+            </button>
+            <button type="button" id="resetGame" class=" ml-2 btn btn-primary btn-sm">
+                Nytt spel
+            </button>
         </header>
         <!--<div>
 			<select id="select">
@@ -24,7 +32,27 @@
 			</select>
 			<button id="start">Starta spelet
 			</button>
-		</div>-->
+        </div>-->
+
+        <!-- Modal -->
+        <div class="modal fade" id="toplistModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Topplista</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <p>Laddar topplistan...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <section>
             <div id="board">
             </div>
@@ -38,6 +66,14 @@
             </div>
         </section>
     </main>
+
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-database.js"></script>
+    <script type="text/javascript" src="toplist.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

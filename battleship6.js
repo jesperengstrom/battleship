@@ -339,6 +339,8 @@ function endScreen(won) {
         var finalTries = tries + 1;
         displayMessage.className = "green";
         displayMessage.innerHTML = "Grattis, du sänkte alla skepp med " + finalTries + " försök kvar!";
+        Toplist.setMyScore(finalTries);
+        Toplist.getToplist(Toplist.compareMyScore)
     } else {
         sndLostGame.play();
         displayMessage.className = "red";
